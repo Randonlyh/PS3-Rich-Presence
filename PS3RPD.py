@@ -95,7 +95,7 @@ class PrepWork:  # Python2 class should be "class PrepWork(object):" ?
             print(f'Error while getting host network. "{e}"')
 
         if hostNetwork is not None:
-            hostNetwork = re.search("^(.*)\.", hostNetwork).group(
+            hostNetwork = re.search("^(.*)\\.", hostNetwork).group(
                 0
             )  # remove machine's octet
             print(f'expected network is "{hostNetwork}"')
@@ -377,11 +377,17 @@ class GatherDetails:
             if status.status_code == 200:  # test if page exists
                 print("using GameTDB")
                 return url
-            else:
-                print(
-                    f"use_gametdb(): no image found at {url}, using Discord dev app image"
-                )
-                return self.titleID.lower()  # bandaid fix, use Discord dev app
+
+            # Extremely hacky fix to get another image for EU regions if it doesn't exist (e.g. Persona 5)
+            if val == "EN":
+                url = f"https://art.gametdb.com/ps3/cover/ES/{self.titleID}.jpg"
+                status = requests.get(url, headers={"User-Agent": "PS3RPD/1.9.7"})
+                if status.status_code == 200:
+                    print("using GameTDB")
+                    return url
+
+            print(f"use_gametdb(): no image found at {url}, using Discord dev app image")
+            return self.titleID.lower()  # bandaid fix, use Discord dev app
 
     def get_retro_image(self):  # uses 'name' for image names
         # apply Discord developer application naming conventions
@@ -391,7 +397,7 @@ class GatherDetails:
             "&amp;", ""
         )  # regex below would only remove "&" without this
         imgName = re.sub(
-            "[\W]+", "", imgName
+            "[\\W]+", "", imgName
         )  # replace any non-letter, digit, or underscore
         imgName = imgName[:32]  # maximum length of 32 characters
         self.image = imgName
@@ -457,7 +463,10 @@ while True:
             try:
                 prepWork.RPC.update(
                     details=gatherDetails.name,
-                    state=gatherDetails.thermalData,
+                    #state=gatherDetails.thermalData,
+                    # I don't want the CPU/GPU temps displayed on Discord, so I just make it say PS3
+                    # (CPU/GPU Temps are still visible in the terminal)
+                    state="on PlayStation 3",
                     large_image=gatherDetails.image,
                     large_text=gatherDetails.titleID,
                     start=timer,
@@ -469,7 +478,8 @@ while True:
             try:
                 prepWork.RPC.update(
                     name=gatherDetails.name,
-                    details=gatherDetails.thermalData,
+                    #details=gatherDetails.thermalData,
+                    state="on PlayStation 3",
                     large_image=gatherDetails.image,
                     large_text=gatherDetails.titleID,
                     start=timer,

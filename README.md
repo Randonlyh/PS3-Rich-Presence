@@ -1,7 +1,14 @@
-# PS3-Rich-Presence-for-Discord
+# PS3-Rich-Presence
 Discord Rich Presence script for PS3 consoles on HFW&HEN or CFW.
 
 Display what game you are playing on PS3 via your PC!
+
+## Changes from the original
+* CPU/RSX tempuratures are no longer displayed - replaced with a simple "on PlayStation 3" string
+	* Temps are still visible in the terminal
+* A (very hacky) fix for EU regions on GameTDB if the normal cover image URL doesn't exist (e.g. Persona 5)
+* Removed Windows .exe (as it would be outdated now)
+* Fixed some warnings
 
 ## Display Example
 <table>
@@ -37,19 +44,6 @@ Display what game you are playing on PS3 via your PC!
 * Discord installed and open on the PC running the script
 * Administrator permissions on the PC
 * A Python 3.9 interpreter installed on the PC if you do not wish to use the executable file
-
-### Windows
-* [version 1.9.7 .exe](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.7/PS3RPD.exe)
-or
-* [version 1.9.7 .py](https://github.com/zorua98741/PS3-Rich-Presence-for-Discord/releases/download/v1.9.7/PS3RPD.py)
-
-#### Installing as a Windows service (optional)
-Download [NSSM](https://nssm.cc/release/nssm-2.24.zip) and run `nssm install <service name ie. ps3rpd>` to install PS3RPD as a Windows service.
-WARNING: PS3RPD.exe must be in a location that won't change ie. C:\ps3rpd\PS3RPD.exe
-
-> [!NOTE]
-> The executable file will very likely be flagged as a virus on your computer due to `pyinstaller` being used to compile it.
-> As far as I know, there is nothing I can do to fix this.
 
 ### Linux 
 
